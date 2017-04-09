@@ -90,7 +90,7 @@ public:
 		catch (...) {
 			throw DC::DC_ERROR("", "无法获取数据", 0);
 		}
-		
+
 		if (judge_response(rv) != true) {
 			throw DC::DC_ERROR("", "HTTP状态" + DC::STR::toString(rv.status_code()), 0);
 		}
@@ -102,7 +102,7 @@ public:
 		}
 		Stats = result;
 	}
-	
+
 	void Write(const std::string& filename) {
 		if (!DC::File::write(filename, this->Get())) throw DC::DC_ERROR("", "无法写入到文件", 0);
 	}
@@ -129,7 +129,7 @@ protected:
 		}
 		catch (...) {
 			return;
-		}		
+		}
 
 		for (auto p : file) {
 			if (p != '\n') { line += p; continue; }
@@ -152,7 +152,7 @@ private:
 };
 
 //基本信息查询
-class BasicStats:public StatsBase {
+class BasicStats :public StatsBase {
 public:
 	virtual std::string Get()override {
 		auto all = std::move(Stats);
@@ -302,7 +302,7 @@ protected:
 };
 
 //武器信息查询
-class WeaponStats :public StatsBase,public Traslate {
+class WeaponStats :public StatsBase, public Traslate {
 public:
 	WeaponStats(const std::string& inputTraslateFilename) {
 		ReadTranslateFile(inputTraslateFilename);
@@ -357,7 +357,7 @@ public:
 						DC::STR::toString(p2.as_object().at(L"stats").as_object().at(L"values").as_object().at(L"accuracy").as_double()),
 						DC::STR::toString(p2.as_object().at(L"stats").as_object().at(L"values").as_object().at(L"headshots").as_integer()),
 						p2.as_object().at(L"stats").as_object().at(L"values").as_object().at(L"seconds").as_double(),
-						DC::STR::toString((int)(p2.as_object().at(L"info").as_object().at(L"rateOfFire").as_integer()*p2.as_object().at(L"info").as_object().at(L"statDamage").as_double()))
+						DC::STR::toString((DC::STR::toType<int>(DC::STR::toString(p2.as_object().at(L"info").as_object().at(L"rateOfFire").as_string()))*p2.as_object().at(L"info").as_object().at(L"statDamage").as_double()))
 					));
 				}
 				catch (...) {

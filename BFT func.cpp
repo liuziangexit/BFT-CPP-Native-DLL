@@ -43,8 +43,12 @@ BFT_EXTERN_C void BFT_CPP_CALL(const wchar_t input[], wchar_t output[], int outp
 	if (BFT_CPP_GetValue(args, "stats") == "Weapons") { Stats.reset(new WeaponStats(BFT_CPP_GetValue(args, "translatefile"))); }
 	if (BFT_CPP_GetValue(args, "stats") == "Vehicles") { Stats.reset(new VehicleStats(BFT_CPP_GetValue(args, "translatefile"))); }
 	if (BFT_CPP_GetValue(args, "stats") == "KitRanks") { Stats.reset(new KitRanks); }
-	//如果没有Stats实例(即用户的Stats输入错误)则退出
-	if (Stats.get() == nullptr) return;
+
+	if (!Stats) {
+		auto res = std::wstring(L"错误:没有 Stats 实例");
+		memcpy(output, res.c_str(), sizeof(wchar_t) * res.size());
+		return;
+	}
 
 	try {
 		Stats->DownloadStats(BFT_CPP_GetValue(args, "id"), DC::STR::toType<std::wstring>(BFT_CPP_GetValue(args, "game")));
@@ -59,4 +63,8 @@ BFT_EXTERN_C void BFT_CPP_CALL(const wchar_t input[], wchar_t output[], int outp
 
 	auto toWide = DC::STR::toType<std::wstring>(returnvalue);
 	if (!(toWide.size() >= outputSize)) memcpy(output, toWide.c_str(), sizeof(wchar_t) * toWide.size());
+	else {
+		toWide = L"错误:resultSize 过小";
+		memcpy(output, toWide.c_str(), sizeof(wchar_t) * toWide.size());
+	}
 }
