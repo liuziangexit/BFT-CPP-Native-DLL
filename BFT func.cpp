@@ -57,6 +57,9 @@ BFT_EXTERN_C void BFT_CPP_CALL(const wchar_t input[], wchar_t output[], int outp
 	catch (const DC::DC_ERROR& err) {
 		returnvalue = "´íÎó:" + err.GetDescription();
 	}
+	catch (const std::exception& err) {
+		returnvalue = std::string("´íÎó:") + err.what();
+	}
 	catch (...) {
 		returnvalue = "´íÎó:Î´²¶»ñµÄÒì³£";
 	}

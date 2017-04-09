@@ -15,15 +15,17 @@ using namespace web;
 
 http_client_config _config;
 std::unique_ptr<http_client> BF_Client;
-http_request BF_request;
 
 //初始化
-void init() {//初始化HTTP请求
+inline void init() {
 	_config.set_timeout(utility::seconds(5));
-
-	BF_request.headers().add(L"TRN-Api-Key", APIKEY);
-
 	BF_Client.reset(new http_client(BaseURI, _config));
+}
+
+http_request GetRequest() {
+	http_request BF_request;
+	BF_request.headers().add(L"TRN-Api-Key", APIKEY);
+	return BF_request;
 }
 
 //GET请求
@@ -82,7 +84,7 @@ public:
 		http_response rv;
 		json::value result;
 		try {
-			rv = HttpGet(BF_Client.get(), _uri.to_string(), BF_request);
+			rv = HttpGet(BF_Client.get(), _uri.to_string(), GetRequest());
 		}
 		catch (const std::exception& ex) {
 			throw DC::DC_ERROR("", ex.what(), 0);
