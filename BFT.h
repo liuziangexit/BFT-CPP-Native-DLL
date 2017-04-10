@@ -13,13 +13,11 @@ using namespace web::http;
 using namespace web::http::client;
 using namespace web;
 
-http_client_config _config;
-std::unique_ptr<http_client> BF_Client;
-
 //初始化
-inline void init() {
+inline http_client GetClient() {
+	http_client_config _config;
 	_config.set_timeout(utility::seconds(5));
-	BF_Client.reset(new http_client(BaseURI, _config));
+	return http_client(BaseURI, _config);
 }
 
 http_request GetRequest() {
@@ -29,9 +27,9 @@ http_request GetRequest() {
 }
 
 //GET请求
-http_response HttpGet(http_client *_client, const std::wstring& _uri, http_request _request) {//发送 HTTP GET 请求
+http_response HttpGet(http_client& _client, const std::wstring& _uri, http_request _request) {//发送 HTTP GET 请求
 	_request.set_request_uri(_uri);
-	return _client->request(_request).get();
+	return _client.request(_request).get();
 }
 
 //保存response的body到文件，仅支持文本(而不是二进制)
@@ -84,7 +82,7 @@ public:
 		http_response rv;
 		json::value result;
 		try {
-			rv = HttpGet(BF_Client.get(), _uri.to_string(), GetRequest());
+			rv = HttpGet(GetClient(), _uri.to_string(), GetRequest());
 		}
 		catch (const std::exception& ex) {
 			throw DC::DC_ERROR("", ex.what(), 0);

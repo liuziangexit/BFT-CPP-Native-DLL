@@ -31,11 +31,10 @@ inline std::string BFT_CPP_GetValue(const std::vector<DC::KeyValuePair>& input, 
 	return "";
 }
 
-BFT_EXTERN_C void BFT_CPP_CALL(const wchar_t input[], wchar_t output[], int outputSize) {
+BFT_EXTERN_C void BFT_CPP_CALL(const wchar_t input[], wchar_t output[], int outputSize)noexcept {
 	auto args = BFT_CPP_GetArgs(input);
 	std::string returnvalue;
 
-	init();
 	std::unique_ptr<StatsBase> Stats;
 	if (BFT_CPP_GetValue(args, "stats") == "BasicStats") { Stats.reset(new BasicStats); }
 	if (BFT_CPP_GetValue(args, "stats") == "DetailedStats") { Stats.reset(new DetailedStats); }
