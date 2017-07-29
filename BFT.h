@@ -238,10 +238,15 @@ public:
 		WriteThis += DC::STR::toString(result.at(L"revives").as_integer()) += "\n";
 		WriteThis += DC::STR::toString(result.at(L"roundsPlayed").as_integer()) += "\n";
 		//Ä³Ð©IDÃ»ÓÐfavMAP
-		if (result.at(L"roundHistory").as_object().at(L"favouriteMap").is_string()) {
-			WriteThis += DC::STR::toString(result.at(L"roundHistory").as_object().at(L"favouriteMap").as_string()) += "\n";
+		try {
+			if (result.at(L"roundHistory").as_object().at(L"favouriteMap").is_string()) {
+				WriteThis += DC::STR::toString(result.at(L"roundHistory").as_object().at(L"favouriteMap").as_string()) += "\n";
+			}
+			else {
+				WriteThis += "-NULL\n";
+			}
 		}
-		else {
+		catch (...) {
 			WriteThis += "-NULL\n";
 		}
 		WriteThis += DC::STR::toString(result.at(L"favoriteClass").as_string()) += "\n";
