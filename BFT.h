@@ -92,6 +92,8 @@ public:
 		}
 
 		if (judge_response(rv) != true) {
+			if (rv.status_code() == 400)
+				throw DC::DC_ERROR("", "´ËID²»´æÔÚ", 0);
 			throw DC::DC_ERROR("", "HTTP×´Ì¬" + DC::STR::toString(rv.status_code()), 0);
 		}
 		try {
